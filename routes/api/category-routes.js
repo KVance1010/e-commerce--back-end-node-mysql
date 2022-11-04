@@ -7,43 +7,41 @@ router.get('/', async (req, res) => {
 		const categoryProduct = await Category.findAll({
 			include: [{ model: Product }],
 		});
-		res.status(200).json(categoryProduct);
+		res.json(categoryProduct);
 	} catch (err) {
-		res.status(500).json(err);
+		res.json(err);
 	}
 });
 
 router.get('/:id', async (req, res) => {
 	try {
-		const categoryProduct = await Category.findByPk(req.params.id, {
+		const catProdId = await Category.findByPk(req.params.id, {
 			include: [{ model: Product }],
 		});
-		if (!categoryProduct) {
-			res.status(404).json({ message: 'No library card found with that id!' });
+		if (!catProdId ) {
+			res.json({ message: 'No Category found' });
 			return;
 		}
-		res.status(200).json(categoryProduct);
+		res.json(catProdId);
 	} catch (err) {
-		res.status(500).json(err);
+		res.json(err);
 	}
 });
 
 // create a new category
 router.post('/', async (req, res) => {
 	try {
-		const newCategory = await Category.create({
-			category_name: req.body.category_name,
-		});
-		res.status(200).json(newCategory);
+		await Category.create({category_name: req.body.category_name});
+		res.json({ message: "Created successfully"});
 	} catch (err) {
-		res.status(400).json(err);
+		res.json(err);
 	}
 });
 
 // update a category by its `id` value
 router.put('/:id', async (req, res) => {
 	try {
-		const updateCategory = await Category.update(
+		await Category.update(
 			{
 				category_name: req.body.category_name,
 			},
@@ -53,9 +51,9 @@ router.put('/:id', async (req, res) => {
 				},
 			}
 		);
-		res.status(200).json(updateCategory);
+		res.json({ message: "Updated successfully"});
 	} catch (err) {
-		res.status(400).json(err);
+		res.json(err);
 	}
 });
 
@@ -64,10 +62,10 @@ router.delete('/:id', async (req, res) => {
 	try {
 		const categoryDelete = await Category.destroy({where: {id: req.params.id}});
 		if (!categoryDelete) {
-			res.json({ message: 'No library card found with that id!' });
+			res.json({ message: 'Deleted already' });
 			return;
 		}
-		res.json("Deleted successfully");
+		res.json({ message: "Deleted successfully"});
 	} catch (err) {
 		res.json(err);
 	}

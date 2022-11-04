@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 		});
 		res.json(productCatTag);
 	} catch (err) {
-		res.status(500).json(err);
+		res.json(err);
 	}
 });
 
@@ -19,11 +19,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
 		const productTag = await Product.findByPk(req.params.id, {
-			include: [{ model: Category },{ model: Tag}],
+			include: [{ model: Category }, { model: Tag}],
 		});
 		res.json(productTag);
 	} catch (err) {
-		res.status(500).json(err);
+		res.json(err);
 	}
 });
 
@@ -42,9 +42,9 @@ router.post('/', (req, res) => {
         return ProductTag.bulkCreate(productTagIdArr);
       }
       // if no product tags, just respond
-      res.json(product);
+      res.json({ message: "Created successfully"});
     })
-    .then((productTagIds) => res.json(productTagIds))
+    .then((productTagIds) => res.json({ message: "Created successfully"}))
     .catch((err) => {
       console.log(err);
       res.json(err);
@@ -61,7 +61,7 @@ router.put('/:id', (req, res) => {
   })
     .then((product) => {
       // find all associated tags from ProductTag
-      return ProductTag.findAll({ where: { product_id: req.params.id } });
+      return ProductTag.findAll({ where: { product_id: req.params.id }});
     })
     .then((productTags) => {
       // get list of current tag_ids
@@ -82,11 +82,11 @@ router.put('/:id', (req, res) => {
 
       // run both actions
       return Promise.all([
-        ProductTag.destroy({ where: { id: productTagsToRemove } }),
+        ProductTag.destroy({ where: { id: productTagsToRemove }}),
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
-    .then((updatedProductTags) => res.json(updatedProductTags))
+    .then((updatedProductTags) => res.json({ message: "Updated successfully"}))
     .catch((err) => {
       res.json(err);
     });
@@ -95,12 +95,12 @@ router.put('/:id', (req, res) => {
  // delete one product by its `id` value
 router.delete('/:id', async (req, res) => {
   try {
-		const categoryDelete = await Category.destroy({where: {id: req.params.id}});
-		if (!categoryDelete) {
-			res.json({ message: 'No library card found with that id!' });
+    const productDelete = await Product.destroy({where: {id: req.params.id}});
+		if (!productDelete) {
+			res.json({ message: "Deleted already"});
 			return;
 		}
-		res.json("Deleted successfully");
+		res.json({ message: "Deleted successfully"});
 	} catch (err) {
 		res.json(err);
 	}
