@@ -1,12 +1,52 @@
-# 13 Object-Relational Mapping (ORM): E-Commerce Back End
+# E-Commerce Back End ORM project
 
-## Your Task
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Internet retail, also known as **e-commerce**, is the largest sector of the electronics industry, generating an estimated $29 trillion in 2019. E-commerce platforms like Shopify and WooCommerce provide a suite of services to businesses of all sizes. Due to their prevalence, understanding the fundamental architecture of these platforms will benefit you as a full-stack web developer.
+## Description
 
-Your task is to build the back end for an e-commerce site by modifying starter code. You’ll configure a working Express.js API to use Sequelize to interact with a MySQL database.
+This is an e-commerce backend that links to a database. A database is essential to any application that collects data. This application uses JavaScript, Sequelize, Express, Node, and MySQL to build out a backend of the e-commerce site. We can choose from many ORM tools, but for this module we'll use Sequelize. A popular JavaScript ORM that uses object-oriented programming, Sequelize enables us to communicate with Postgres, MySQL, MariaDB, SQLite, and Microsoft SQL Server using Node.js. QL.
 
-Because this application won’t be deployed, you’ll also need to provide a link to a walkthrough video that demonstrates its functionality and all of the acceptance criteria being met. You’ll need to submit a link to the video and add it to the readme of your project.
+---
+
+### Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies](#technologies)
+- [User-Story](#user-story)
+- [Acceptance-Criteria](#acceptance-criteria)
+- [Screenshots](#screenshots)
+- [CodeSnippets](#codeSnippets)
+- [License](#license)
+- [Contributors](#contributors)
+- [Tests](#tests)
+- [Important-Information-Questions](#important-information-questions)
+
+---
+
+## Installation
+
+the User can install all the required packages by using npm install. Node.js, Sequelize, and Express were used to create this package. 
+
+---
+
+## Usage
+
+This is a back end application that creates REST resources that users can access. 
+
+---
+
+## Technologies
+
+- **MySQL**
+- **JavaScript**
+- **Insomnia**
+- **Node.js**
+- **GitHub**
+- **Sequelize**
+- **Express**
+
+---
 
 ## User Story
 
@@ -15,6 +55,8 @@ AS A manager at an internet retail company
 I WANT a back end for my e-commerce website that uses the latest technologies
 SO THAT my company can compete with other e-commerce companies
 ```
+
+---
 
 ## Acceptance Criteria
 
@@ -32,28 +74,69 @@ WHEN I test API POST, PUT, and DELETE routes in Insomnia
 THEN I am able to successfully create, update, and delete data in my database
 ```
 
-### Associations
+## Screenshots
 
-You'll need to execute association methods on your Sequelize models to create the following relationships between them:
+#### Get Categories
 
-* `Product` belongs to `Category`, and `Category` has many `Product` models, as a category can have multiple products but a product can only belong to one category.
+![Home Page](./Assets/getAllCat.jpg)
 
-* `Product` belongs to many `Tag` models, and `Tag` belongs to many `Product` models. Allow products to have multiple tags and tags to have many products by using the `ProductTag` through model.
+#### Post Product
 
-> **Hint:** Make sure you set up foreign key relationships that match the column we created in the respective models.
+![Note Page](./Assets/postProd.jpg)
 
-### Fill Out the API Routes to Perform RESTful CRUD Operations
+---
 
-Fill out the unfinished routes in `product-routes.js`, `tag-routes.js`, and `category-routes.js` to perform create, read, update, and delete operations using your Sequelize models.
+## CodeSnippets
 
-Note that the functionality for creating the many-to-many relationship for products has already been completed for you.
+#### This function creates a tag and adds an array of products
 
-> **Hint**: Be sure to look at the mini-project code for syntax help and use your model's column definitions to figure out what `req.body` will be for POST and PUT routes!
+```Sequelize/Express
+Tag.create(req.body)
+  .then((tag) => {
+    if (req.body.productIds.length) {
+      const productTagIdArr = req.body.productIds.map((product_id) => {
+        return {
+          tag_id: tag.id,
+          product_id,
+        };
+      });
+      return ProductTag.bulkCreate(productTagIdArr);
+    }
+    res.json({ message: "Created successfully"});
+  })
+  .then((productTagIds) => res.json({ message: "Created successfully"}))
+  .catch((err) => {
+    console.log(err);
+    res.json(err);
+  });
+```
 
-### Seed the Database
+---
 
-After creating the models and routes, run `npm run seed` to seed data to your database so that you can test your routes.
+## Tests
 
-### Sync Sequelize to the Database on Server Start
+N/A
 
-Create the code needed in `server.js` to sync the Sequelize models to the MySQL database on server start.
+---
+
+## **Important-Information-Questions**
+
+---
+
+## License
+
+The license used on this project was MIT license
+
+[license link](https://opensource.org/licenses/MIT)
+
+## Contributors
+
+Kyle Vance
+
+## Questions
+
+If you have any questions regarding this project, please reach me by email at vanceofalifetime@protonmail.com
+
+[Video Link](https://drive.google.com/file/d/1Zd8tQU8jGkFt3rSo0OYSCpSrnKXD1ytb/view)
+
+[LinkedIn](https://www.linkedin.com/in/kyle-s-vance/)

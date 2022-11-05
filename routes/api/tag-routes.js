@@ -27,7 +27,11 @@ router.get('/:id', async (req, res) => {
 	}
 });
 
+// create a new tag
 router.post('/', (req, res) => {
+// Tag.create(req.body).then((tag)=>
+// res.status(200).json(tag)).catch((err)=> res.status(404).json(err));
+
   Tag.create(req.body)
   .then((tag) => {
     if (req.body.productIds.length) {
@@ -65,6 +69,7 @@ router.post('/', (req, res) => {
 	// }
 });
 
+// update a tag
 router.put('/:id', async(req, res) => {
 	try {
     await Tag.update(req.body, {
